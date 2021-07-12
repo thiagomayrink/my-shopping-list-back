@@ -46,11 +46,14 @@ describe("POST /items", () => {
 describe("GET /items", () => {
     
     it("returns items list for a non empty list", async () => {
+        
+        const text = "test item"
         await connection.query(`
-            INSERT INTO items (text) VALUES ("test_item")
-        `);
+            INSERT INTO items (text) VALUES ($1)
+        `,[text]);
 
         const result = await supertest(app).get("/items");
+
         expect(result.status).toEqual(200);
         expect(result.body).toEqual(
             expect.arrayContaining([
